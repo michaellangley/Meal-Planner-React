@@ -1,16 +1,44 @@
-# React + Vite
+# The Weekly Board 🍲
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A little recipe search \+ meal planner app I built to actually get comfortable with React — hooks, context, the works. Pulls real recipes from [TheMealDB](https://www.themealdb.com/api.php) (free API, no key needed).
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Search recipes by name, or browse by category  
+- Click a recipe to see the full ingredient list and instructions  
+- Heart your favorites — they stick around after a refresh  
+- Pin recipes to days of the week on a planner board  
+- Auto-generates a shopping list from whatever's on the board that week, sorted A-Z  
+- Infinite scroll on the recipe grid instead of one giant list dump  
+- Proper routing (`/`, `/planner`, `/favorites`) with active nav highlighting
 
-## React Compiler
+## Built with
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React \+ Vite  
+- React Router  
+- TheMealDB API  
+- Plain CSS (no framework — wanted the practice)
 
-## Expanding the ESLint configuration
+## Running it locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+npm install
+
+npm run dev
+
+Then open whatever local URL it prints.
+
+## Why I built it this way
+
+This started as a learning project, so the structure leans toward "demonstrate the concept clearly" rather than the absolute leanest code:
+
+- **`context/`** — favorites and the weekly plan live in React Context so any component can read/update them without props being passed down five levels  
+- **`PlannerContext`** uses `useReducer` since the planner has a few different actions (assign a day, clear a day, clear the week) — felt cleaner than a pile of separate `useState` calls  
+- **`hooks/`** — pulled out a `useDebounce` and a `useLocalStorage` since both favorites and the planner needed persistence, and the search box needed debouncing so it's not firing a request on every keystroke  
+- Ingredient list parsing is its own little utility — TheMealDB packs ingredients into 20 numbered fields instead of an array, so that gets flattened into something sane once and reused wherever needed
+
+## Things I'd add if I kept going
+
+- Drag and drop for rearranging the planner board  
+- Pagination feels a bit hacky since the API itself doesn't actually paginate — would be worth revisiting if this ever needed to scale  
+- A full calendar planner to be able to plan weeks or even months in advance.
+
